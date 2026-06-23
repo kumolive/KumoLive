@@ -9,7 +9,7 @@
   <!-- Target configure -->
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
@@ -38,6 +38,9 @@
     <!-- D5 -->
     <Compile Include="d5_render/**/build.cs" />
     <Compile Include="d5_lite/**/build.cs" />
+
+    <!-- Project modules -->
+    <Compile Include="project/**/build.cs" />
 
     <!-- Include local_config.cs if it exists -->
     <Compile Include="local_config.cs" Condition="Exists('local_config.cs')" />

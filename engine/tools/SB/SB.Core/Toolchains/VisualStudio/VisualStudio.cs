@@ -15,7 +15,7 @@ namespace SB.Core
     
     public partial class VisualStudio : IToolchain
     {
-        public static bool UseClangCl = true;
+        public static bool UseClangCl = false;
         public static WindowsSDKStrategy WindowsSDKStrategy = WindowsSDKStrategy.Default;
     }
 
@@ -48,7 +48,7 @@ namespace SB.Core
             if (VSVersion == 2022)
             {
                 var vsInstance = SearchVS2022.FindBestInstance();
-                
+
                 if (vsInstance != null && vsInstance.IsValid)
                 {
                     // 重要：VS 批处理文件期望 VSINSTALLDIR 以斜杠结尾
@@ -61,11 +61,11 @@ namespace SB.Core
                     {
                         VSInstallDir = VSInstallDir.Replace("\\", "/");
                     }
-                    
+
                     VCVarsAllBat = vsInstance.VCVarsAllBat;
                     VCVarsBat = vsInstance.VCVarsBat;
                     WindowsSDKBat = vsInstance.WindowsSDKBat;
-                    
+
                     Log.Verbose("Found VS2022 at: {InstallDir}", VSInstallDir);
                     if (FastFind)
                     {
@@ -80,6 +80,42 @@ namespace SB.Core
                 else
                 {
                     Log.Error("Visual Studio 2022 not found");
+                }
+            }
+            else if (VSVersion == 2026)
+            {
+                var vsInstance = SearchVS2026.FindBestInstance();
+
+                if (vsInstance != null && vsInstance.IsValid)
+                {
+                    VSInstallDir = vsInstance.InstallPath;
+                    if (!VSInstallDir!.EndsWith("/") && !VSInstallDir.EndsWith("\\"))
+                    {
+                        VSInstallDir = VSInstallDir.Replace("\\", "/") + "/";
+                    }
+                    else
+                    {
+                        VSInstallDir = VSInstallDir.Replace("\\", "/");
+                    }
+
+                    VCVarsAllBat = vsInstance.VCVarsAllBat;
+                    VCVarsBat = vsInstance.VCVarsBat;
+                    WindowsSDKBat = vsInstance.WindowsSDKBat;
+
+                    Log.Verbose("Found VS2026 at: {InstallDir}", VSInstallDir);
+                    if (FastFind)
+                    {
+                        Log.Verbose("Found VCVarsBat: {VCVarsBat}", VCVarsBat);
+                        Log.Verbose("Found WindowsSDKBat: {WindowsSDKBat}", WindowsSDKBat);
+                    }
+                    else
+                    {
+                        Log.Verbose("Found VCVarsAllBat: {VCVarsAllBat}", VCVarsAllBat);
+                    }
+                }
+                else
+                {
+                    Log.Error("Visual Studio 2026 not found");
                 }
             }
             else
@@ -471,6 +507,6 @@ namespace SB.Core
             }
         }
 
-        public static VisualStudio VisualStudio { get; set; } = new VisualStudio(2022);
+        public static VisualStudio VisualStudio { get; set; } = new VisualStudio(2026);
     }
 }
